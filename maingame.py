@@ -39,24 +39,40 @@ intake_sound = mixer.Sound("sound/intake.wav")
 move_sound = mixer.Sound("sound/grass.wav")
 
 # Sets graphics for bins
-garbagebot = pygame.transform.scale(pygame.image.load('img/bins/garbagebot.png'), (60, 80))
-garbagetopclose = pygame.transform.scale(pygame.image.load('img/bins/garbagetopclose.png'), (60, 13))
-garbagetopopen = pygame.transform.scale(pygame.image.load('img/bins/garbagetopopen.png'), (60, 50))
-compostbot = pygame.transform.scale(pygame.image.load('img/bins/compostbot.png'), (60, 80))
-composttopclose = pygame.transform.scale(pygame.image.load('img/bins/composttopclose.png'), (60, 13))
-composttopopen = pygame.transform.scale(pygame.image.load('img/bins/composttopopen.png'), (60, 50))
-recyclebot = pygame.transform.scale(pygame.image.load('img/bins/recyclebot.png'), (60, 80))
-recycletopclose = pygame.transform.scale(pygame.image.load('img/bins/recycletopclose.png'), (60, 13))
-recycletopopen = pygame.transform.scale(pygame.image.load('img/bins/recycletopopen.png'), (60, 50))
+garbagebot = pygame.transform.scale(
+    pygame.image.load('img/bins/garbagebot.png'), (60, 80))
+garbagetopclose = pygame.transform.scale(
+    pygame.image.load('img/bins/garbagetopclose.png'), (60, 13))
+garbagetopopen = pygame.transform.scale(
+    pygame.image.load('img/bins/garbagetopopen.png'), (60, 50))
+compostbot = pygame.transform.scale(
+    pygame.image.load('img/bins/compostbot.png'), (60, 80))
+composttopclose = pygame.transform.scale(
+    pygame.image.load('img/bins/composttopclose.png'), (60, 13))
+composttopopen = pygame.transform.scale(
+    pygame.image.load('img/bins/composttopopen.png'), (60, 50))
+recyclebot = pygame.transform.scale(
+    pygame.image.load('img/bins/recyclebot.png'), (60, 80))
+recycletopclose = pygame.transform.scale(
+    pygame.image.load('img/bins/recycletopclose.png'), (60, 13))
+recycletopopen = pygame.transform.scale(
+    pygame.image.load('img/bins/recycletopopen.png'), (60, 50))
 
 # Sets graphics for screens
-lockscreen = pygame.transform.scale(pygame.image.load('img/screens/Lock Screen.png'), (960, 540))
-level1 = pygame.transform.scale(pygame.image.load('img/screens/Level 1.png'), (700, 540))
-level2 = pygame.transform.scale(pygame.image.load('img/screens/Level 2.png'), (700, 540))
-level3 = pygame.transform.scale(pygame.image.load('img/screens/Level 3.png'), (700, 540))
-level4 = pygame.transform.scale(pygame.image.load('img/screens/Level 4.png'), (700, 540))
-level5 = pygame.transform.scale(pygame.image.load('img/screens/Level 5.png'), (700, 540))
-endscreen = pygame.transform.scale(pygame.image.load('img/screens/End Screen.png'), (960, 540))
+lockscreen = pygame.transform.scale(pygame.image.load(
+    'img/screens/Lock Screen.png'), (960, 540))
+level1 = pygame.transform.scale(pygame.image.load(
+    'img/screens/Level 1.png'), (700, 540))
+level2 = pygame.transform.scale(pygame.image.load(
+    'img/screens/Level 2.png'), (700, 540))
+level3 = pygame.transform.scale(pygame.image.load(
+    'img/screens/Level 3.png'), (700, 540))
+level4 = pygame.transform.scale(pygame.image.load(
+    'img/screens/Level 4.png'), (700, 540))
+level5 = pygame.transform.scale(pygame.image.load(
+    'img/screens/Level 5.png'), (700, 540))
+endscreen = pygame.transform.scale(pygame.image.load(
+    'img/screens/End Screen.png'), (960, 540))
 
 # Sets graphics for HUD
 a_key = pygame.transform.scale(pygame.image.load('img/a.png'), (60, 60))
@@ -91,19 +107,30 @@ waste_list = []
 remove_waste = []
 waste_pool = [1, 2]  # List of waste items eligible to be spawned in the round
 waste_randomizer = 0  # A random number drawn from waste_pool
-waste_widths = [40, 50, 50, 50, 50, 40, 50, 30, 50, 50, 50, 48, 40, 40, 20, 20, 40, 23]
-waste_heights = [40, 25, 25, 25, 31, 40, 25, 45, 25, 30, 40, 45, 40, 40, 40, 40, 40, 40]
+waste_widths = [40, 50, 50, 50, 50, 40, 50,
+                30, 50, 50, 50, 48, 40, 40, 20, 20, 40, 23]
+waste_heights = [40, 25, 25, 25, 31, 40, 25,
+                 45, 25, 30, 40, 45, 40, 40, 40, 40, 40, 40]
 waste_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
 wasteGraphics = [pygame.transform.scale(pygame.image.load('img/waste/garb1.png'), (waste_widths[0], waste_heights[0])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb2.png'), (waste_widths[1], waste_heights[1])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb3.png'), (waste_widths[2], waste_heights[2])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb4.png'), (waste_widths[3], waste_heights[3])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb5.png'), (waste_widths[4], waste_heights[4])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb7.png'), (waste_widths[6], waste_heights[6])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb9.png'), (waste_widths[8], waste_heights[8])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb10.png'), (waste_widths[9], waste_heights[9])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb2.png'), (waste_widths[1], waste_heights[1])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb3.png'), (waste_widths[2], waste_heights[2])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb4.png'), (waste_widths[3], waste_heights[3])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb5.png'), (waste_widths[4], waste_heights[4])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb7.png'), (waste_widths[6], waste_heights[6])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb9.png'), (waste_widths[8], waste_heights[8])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/waste/garb10.png'), (waste_widths[9], waste_heights[9])),
                  pygame.transform.scale(pygame.image.load('img/waste/garb11.png'),
                                         (waste_widths[10], waste_heights[10])),
                  pygame.transform.scale(pygame.image.load('img/waste/garb12.png'),
@@ -140,8 +167,10 @@ cloud_heights = [70, 80, 100, 160]
 remove_cloud = []
 cloud_randomizer = 0  # A random number drawn from cloud pool
 cloudGraphics = [pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[0], cloud_heights[0])),
-                 pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[1], cloud_heights[1])),
-                 pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[2], cloud_heights[2])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/cloud.png'), (cloud_widths[1], cloud_heights[1])),
+                 pygame.transform.scale(pygame.image.load(
+                     'img/cloud.png'), (cloud_widths[2], cloud_heights[2])),
                  pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[3], cloud_heights[3]))]
 
 # Title screen music
@@ -292,7 +321,8 @@ while not done and start == 1:
     cloudSpawnTimer += 1
     if cloudSpawnTimer == 480:
         cloud_randomizer = random.randint(0, 3)
-        newCloud = Cloud(cloud_randomizer, 700, random.randint(0, 300), random.randint(2, 5) / 10)
+        newCloud = Cloud(cloud_randomizer, 700, random.randint(
+            0, 300), random.randint(2, 5) / 10)
         cloud_list.append(newCloud)
         cloudSpawnTimer = 0
 
@@ -409,7 +439,8 @@ while not done and start == 1:
     # Waste icons
     if level >= 1 and level != 6:
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb1.png'), (waste_widths[0], waste_heights[0])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb1.png'), (waste_widths[0], waste_heights[0])),
             (732, 180))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb2.png'),
                                            (waste_widths[1] - 4, waste_heights[1] - 4)), (728, 240))
@@ -417,14 +448,17 @@ while not done and start == 1:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb7.png'),
                                            (waste_widths[6] - 4, waste_heights[6] - 4)), (808, 180))
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
             (814, 220))
     if level >= 3 and level != 6:
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb13.png'), (waste_widths[12], waste_heights[12])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb13.png'), (waste_widths[12], waste_heights[12])),
             (891, 175))
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb14.png'), (waste_widths[13], waste_heights[13])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb14.png'), (waste_widths[13], waste_heights[13])),
             (890, 230))
     if level >= 4 and level != 6:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb3.png'),
@@ -436,16 +470,19 @@ while not done and start == 1:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb10.png'),
                                            (waste_widths[9] - 4, waste_heights[9] - 4)), (809, 344))
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb15.png'), (waste_widths[14], waste_heights[14])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb15.png'), (waste_widths[14], waste_heights[14])),
             (897, 285))
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb16.png'), (waste_widths[15], waste_heights[15])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb16.png'), (waste_widths[15], waste_heights[15])),
             (897, 338))
     if level >= 5 and level != 6:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb5.png'),
                                            (waste_widths[4] - 4, waste_heights[4] - 4)), (728, 391))
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
             (732, 440))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb11.png'),
                                            (waste_widths[10] - 4, waste_heights[10] - 4)), (808, 390))
@@ -454,7 +491,8 @@ while not done and start == 1:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb17.png'),
                                            (waste_widths[16] - 2, waste_heights[16] - 2)), (893, 390))
         screen.blit(
-            pygame.transform.scale(pygame.image.load('img/waste/garb18.png'), (waste_widths[17], waste_heights[17])),
+            pygame.transform.scale(pygame.image.load(
+                'img/waste/garb18.png'), (waste_widths[17], waste_heights[17])),
             (897, 443))
 
     # Bin icons
