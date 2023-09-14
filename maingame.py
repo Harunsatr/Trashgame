@@ -6,7 +6,7 @@ from pygame import mixer
 pygame.init()
 size = (960, 540)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("My Game")
+pygame.display.set_caption("Orderan")
 done = False
 clock = pygame.time.Clock()
 
