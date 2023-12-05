@@ -3,15 +3,15 @@ import random
 from pygame import mixer
 
 # Initialize game elements
-pygame.init()
-size = (960, 540)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Orderan")
-done = False
-clock = pygame.time.Clock()
+pygame.init() # Inisialisasi modul pygame
+size = (960, 540) # Menentukan ukuran layar permainan
+screen = pygame.display.set_mode(size) # Membuat layar permainan dengan ukuran yang telah ditentukan
+pygame.display.set_caption("Trash Attack") # Memberi judul pada jendela permainan
+done = False # Variabel untuk menentukan apakah permainan sudah selesai atau belum
+clock = pygame.time.Clock() # Objek clock untuk mengontrol kecepatan permainan
 
 # Defines general colours
-SKY = (150, 240, 255)
+SKY = (150, 240, 255) # Warna langit 
 GRASS = (126, 200, 80)
 IVORY = (250, 250, 235)
 RED = (255, 0, 0)
@@ -20,25 +20,25 @@ GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
 
 # Sets general variables
-key = 0
-start = 0
-level = 1
-paused = 0
-wasteSpawnTimer = 0
-cloudSpawnTimer = 0
-score = 0
-score_threshold = 15
-font = pygame.font.SysFont('Arial', 22)
+key = 0 # Variabel ini dapat digunakan untuk memantau tombol yang ditekan oleh pemain.
+start = 0  # Variabel ini menandakan apakah permainan telah dimulai (1) atau belum (0).
+level = 1  # Variabel ini menyimpan tingkat permainan saat ini.
+paused = 0  # Variabel ini menandakan apakah permainan sedang dijeda (1) atau tidak (0).
+wasteSpawnTimer = 0  # Variabel ini dapat digunakan untuk mengatur interval waktu spawn sampah.
+cloudSpawnTimer = 0  # Variabel ini dapat digunakan untuk mengatur interval waktu spawn awan.
+score = 0  # Variabel ini menyimpan skor pemain dalam permainan.
+score_threshold = 15  # Skor yang dibutuhkan pemain untuk melanjutkan ke level berikutnya.
+font = pygame.font.SysFont('Arial', 22)  # Variabel ini menyimpan jenis font dan ukuran font yang digunakan untuk tampilan teks dalam permainan.
 
-# Sound effect
+# Sound effect, berisi efek musik didalam game 
 succ_sound = mixer.Sound("sound/laserbeam.wav")
 switch_sound = mixer.Sound("sound/switch.wav")
-levelup_sound = mixer.Sound("sound/levelup.wav")
+levelup_sound = mixer.Sound("sound/levelup.wav")    
 negative_sound = mixer.Sound("sound/negative.wav")
 intake_sound = mixer.Sound("sound/intake.wav")
 move_sound = mixer.Sound("sound/grass.wav")
 
-# Sets graphics for bins
+# Sets graphics for bins, berisi icon gambar yang digunakan dalam game berserta skalanya
 garbagebot = pygame.transform.scale(
     pygame.image.load('img/bins/garbagebot.png'), (60, 80))
 garbagetopclose = pygame.transform.scale(
@@ -58,7 +58,7 @@ recycletopclose = pygame.transform.scale(
 recycletopopen = pygame.transform.scale(
     pygame.image.load('img/bins/recycletopopen.png'), (60, 50))
 
-# Sets graphics for screens
+# Sets graphics for screens, mengatur lebar dan tingginya icon gambar yang digunakan dalam game 
 lockscreen = pygame.transform.scale(pygame.image.load(
     'img/screens/Lock Screen.png'), (960, 540))
 level1 = pygame.transform.scale(pygame.image.load(
@@ -74,108 +74,109 @@ level5 = pygame.transform.scale(pygame.image.load(
 endscreen = pygame.transform.scale(pygame.image.load(
     'img/screens/End Screen.png'), (960, 540))
 
-# Sets graphics for HUD
+# Sets graphics for HUD, meletakkan tombol A, S, D pada icon sampah untuk mengganti sampah 
 a_key = pygame.transform.scale(pygame.image.load('img/a.png'), (60, 60))
 s_key = pygame.transform.scale(pygame.image.load('img/s.png'), (60, 60))
 d_key = pygame.transform.scale(pygame.image.load('img/d.png'), (60, 60))
 hud = pygame.transform.scale(pygame.image.load('img/hud.png'), (260, 540))
 
 # Sets variables related to the player
-binpositionx = 320
-binpositiony = 410
-binvelocityx = 0
-bintype = "garbage"
-binSucc = False
-
+binpositionx = 320  # Variabel ini menyimpan posisi horizontal kotak sampah pada sumbu x.
+binpositiony = 410  # Variabel ini menyimpan posisi vertikal kotak sampah pada sumbu y.
+binvelocityx = 0  # Variabel ini menyimpan kecepatan horizontal kotak sampah pada sumbu x.
+bintype = "garbage"  # Variabel ini menentukan jenis sampah yang dapat ditempatkan oleh pemain.
+binSucc = False  # Variabel ini menunjukkan apakah pemain berhasil memasukkan sampah ke dalam kotak atau tidak (False menunjukkan kegagalan).
 
 # -----EVERYTHING WASTE-----
 class Waste:
     def __init__(self, wasteID, wasteX, wasteY, wasteSpeed, wasteWidth, wasteHeight):
-        self.ID = wasteID
-        self.x = wasteX
-        self.y = wasteY
-        self.speed = wasteSpeed
-        self.width = wasteWidth
-        self.height = wasteHeight
+        self.ID = wasteID  # ID sampah, digunakan untuk mengidentifikasi jenis sampah
+        self.x = wasteX  # Posisi horizontal sampah pada sumbu x
+        self.y = wasteY # Posisi vertikal sampah pada sumbu y
+        self.speed = wasteSpeed # Kecepatan pergerakan sampah
+        self.width = wasteWidth # Lebar sampah
+        self.height = wasteHeight # Tinggi sampah 
 
-    def draw(self):
+    def draw(self):   # Memilih gambar sampah sesuai dengan ID sampah dan menampilkannya di posisi (x, y)
         wasteType = wasteGraphics[self.ID - 1]
         screen.blit(wasteType, (int(self.x), int(self.y)))
 
-
-waste_list = []
-remove_waste = []
-waste_pool = [1, 2]  # List of waste items eligible to be spawned in the round
-waste_randomizer = 0  # A random number drawn from waste_pool
-waste_widths = [40, 50, 50, 50, 50, 40, 50,
+waste_list = [] # List kosong untuk menyimpan sampah yang sedang ditampilkan di layar
+remove_waste = [] # List kosong untuk menyimpan sampah yang harus dihapus dari layar
+waste_pool = [1, 2]  # List berisi ID sampah yang dapat muncul dalam permainan
+waste_randomizer = 0  # Variabel acak yang akan dipilih dari waste_pool
+waste_widths = [40, 50, 50, 50, 50, 40, 50, # List yang berisi lebar sampah sesuai dengan ID
                 30, 50, 50, 50, 48, 40, 40, 20, 20, 40, 23]
-waste_heights = [40, 25, 25, 25, 31, 40, 25,
-                 45, 25, 30, 40, 45, 40, 40, 40, 40, 40, 40]
-waste_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
-wasteGraphics = [pygame.transform.scale(pygame.image.load('img/waste/garb1.png'), (waste_widths[0], waste_heights[0])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb2.png'), (waste_widths[1], waste_heights[1])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb3.png'), (waste_widths[2], waste_heights[2])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb4.png'), (waste_widths[3], waste_heights[3])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb5.png'), (waste_widths[4], waste_heights[4])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb7.png'), (waste_widths[6], waste_heights[6])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb9.png'), (waste_widths[8], waste_heights[8])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/waste/garb10.png'), (waste_widths[9], waste_heights[9])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb11.png'),
-                                        (waste_widths[10], waste_heights[10])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb12.png'),
-                                        (waste_widths[11], waste_heights[11])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb13.png'),
-                                        (waste_widths[12], waste_heights[12])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb14.png'),
-                                        (waste_widths[13], waste_heights[13])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb15.png'),
-                                        (waste_widths[14], waste_heights[14])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb16.png'),
-                                        (waste_widths[15], waste_heights[15])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb17.png'),
-                                        (waste_widths[16], waste_heights[16])),
-                 pygame.transform.scale(pygame.image.load('img/waste/garb18.png'),
-                                        (waste_widths[17], waste_heights[17]))]
+waste_heights = [40, 25, 25, 25, 31, 40, 25, # List yang berisi tinggi sampah sesuai dengan ID
+                45, 25, 30, 40, 45, 40, 40, 40, 40, 40, 40]
+waste_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18] # List yang berisi ID sampah yang sesuai dengan indeks waste_widths dan waste_heights
 
+# List berisi grafik sampah yang telah diubah ukurannya sesuai dengan lebar dan tinggi masing-masing sampah
+wasteGraphics = [pygame.transform.scale(pygame.image.load('img/waste/garb1.png'), (waste_widths[0], waste_heights[0])),
+                pygame.transform.scale(pygame.image.load( # (berisi gambar sampah lainnya sesuai dengan ID sampah)
+                    'img/waste/garb2.png'), (waste_widths[1], waste_heights[1])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb3.png'), (waste_widths[2], waste_heights[2])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb4.png'), (waste_widths[3], waste_heights[3])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb5.png'), (waste_widths[4], waste_heights[4])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb7.png'), (waste_widths[6], waste_heights[6])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb9.png'), (waste_widths[8], waste_heights[8])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/waste/garb10.png'), (waste_widths[9], waste_heights[9])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb11.png'),
+                                    (waste_widths[10], waste_heights[10])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb12.png'),
+                                    (waste_widths[11], waste_heights[11])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb13.png'),
+                                    (waste_widths[12], waste_heights[12])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb14.png'),
+                                    (waste_widths[13], waste_heights[13])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb15.png'),
+                                    (waste_widths[14], waste_heights[14])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb16.png'),
+                                    (waste_widths[15], waste_heights[15])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb17.png'),
+                                    (waste_widths[16], waste_heights[16])),
+                pygame.transform.scale(pygame.image.load('img/waste/garb18.png'),
+                                    (waste_widths[17], waste_heights[17]))]
 
 # -----EVERYTHING CLOUDS-----
 class Cloud:
     def __init__(self, cloudID, cloudX, cloudY, cloudSpeed):
-        self.ID = cloudID
-        self.x = cloudX
-        self.y = cloudY
-        self.speed = cloudSpeed
+        self.ID = cloudID # ID awan, digunakan untuk mengidentifikasi jenis awan
+        self.x = cloudX   # Posisi horizontal awan pada sumbu x
+        self.y = cloudY # Posisi vertikal awan pada sumbu y
+        self.speed = cloudSpeed # Kecepatan pergerakan awan
 
-    def draw(self):
+    def draw(self): # Menampilkan gambar awan di posisi (x, y) menggunakan ID awan yang sesuai
         screen.blit(cloudGraphics[self.ID], (int(self.x), int(self.y)))
 
 
-cloud_list = []
-cloud_widths = [70, 90, 120, 150]
-cloud_heights = [70, 80, 100, 160]
-remove_cloud = []
-cloud_randomizer = 0  # A random number drawn from cloud pool
+cloud_list = [] # List kosong untuk menyimpan objek awan yang ada di layar
+cloud_widths = [70, 90, 120, 150] # List yang berisi lebar awan sesuai dengan ID
+cloud_heights = [70, 80, 100, 160] # List yang berisi tinggi awan sesuai dengan ID
+remove_cloud = [] # List kosong untuk menyimpan objek awan yang harus dihapus dari layar
+cloud_randomizer = 0  # Variabel acak yang akan dipilih dari cloud pool
+
+# List berisi grafik awan yang telah diubah ukurannya sesuai dengan lebar dan tinggi masing-masing awan
 cloudGraphics = [pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[0], cloud_heights[0])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/cloud.png'), (cloud_widths[1], cloud_heights[1])),
-                 pygame.transform.scale(pygame.image.load(
-                     'img/cloud.png'), (cloud_widths[2], cloud_heights[2])),
-                 pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[3], cloud_heights[3]))]
+                pygame.transform.scale(pygame.image.load(
+                    'img/cloud.png'), (cloud_widths[1], cloud_heights[1])),
+                pygame.transform.scale(pygame.image.load(
+                    'img/cloud.png'), (cloud_widths[2], cloud_heights[2])),
+                pygame.transform.scale(pygame.image.load('img/cloud.png'), (cloud_widths[3], cloud_heights[3]))]
 
 # Title screen music
 mixer.music.load('sound/title music.mp3')
-pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.set_volume(0.1) 
 mixer.music.play(-1)
 
 # -------Title Screen-------
@@ -256,7 +257,7 @@ while not done and start == 1:
                     if (bintype == "garbage" and waste.ID in range(1, 7)) or (
                             bintype == "compost" and waste.ID in range(7, 13)) or (
                             bintype == "recycling" and waste.ID in range(13,
-                                                                         19)):  # Checks if waste type corresponds to bin type
+                                                                        19)):  # Checks if waste type corresponds to bin type
                         score += 1
                     else:
                         if score > 0:
@@ -313,7 +314,7 @@ while not done and start == 1:
         if wasteSpawnTimer == 120:
             waste_randomizer = random.choice(waste_pool)
             newWaste = Waste(waste_randomizer, random.randint(10, 650), 0, random.randint(3, 3 + level) / 4, 35,
-                             35)  # Change this later
+                            35)  # Change this later
             waste_list.append(newWaste)
             wasteSpawnTimer = 0
 
@@ -443,10 +444,10 @@ while not done and start == 1:
                 'img/waste/garb1.png'), (waste_widths[0], waste_heights[0])),
             (732, 180))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb2.png'),
-                                           (waste_widths[1] - 4, waste_heights[1] - 4)), (728, 240))
+                                        (waste_widths[1] - 4, waste_heights[1] - 4)), (728, 240))
     if level >= 2 and level != 6:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb7.png'),
-                                           (waste_widths[6] - 4, waste_heights[6] - 4)), (808, 180))
+                                        (waste_widths[6] - 4, waste_heights[6] - 4)), (808, 180))
         screen.blit(
             pygame.transform.scale(pygame.image.load(
                 'img/waste/garb8.png'), (waste_widths[7], waste_heights[7])),
@@ -462,13 +463,13 @@ while not done and start == 1:
             (890, 230))
     if level >= 4 and level != 6:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb3.png'),
-                                           (waste_widths[2] - 4, waste_heights[2] - 4)), (728, 291))
+                                        (waste_widths[2] - 4, waste_heights[2] - 4)), (728, 291))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb4.png'),
-                                           (waste_widths[3] - 4, waste_heights[3] - 4)), (728, 344))
+                                        (waste_widths[3] - 4, waste_heights[3] - 4)), (728, 344))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb9.png'),
-                                           (waste_widths[8] - 4, waste_heights[8] - 4)), (809, 293))
+                                        (waste_widths[8] - 4, waste_heights[8] - 4)), (809, 293))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb10.png'),
-                                           (waste_widths[9] - 4, waste_heights[9] - 4)), (809, 344))
+                                        (waste_widths[9] - 4, waste_heights[9] - 4)), (809, 344))
         screen.blit(
             pygame.transform.scale(pygame.image.load(
                 'img/waste/garb15.png'), (waste_widths[14], waste_heights[14])),
@@ -479,17 +480,17 @@ while not done and start == 1:
             (897, 338))
     if level >= 5 and level != 6:
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb5.png'),
-                                           (waste_widths[4] - 4, waste_heights[4] - 4)), (728, 391))
+                                        (waste_widths[4] - 4, waste_heights[4] - 4)), (728, 391))
         screen.blit(
             pygame.transform.scale(pygame.image.load(
                 'img/waste/garb6.png'), (waste_widths[5], waste_heights[5])),
             (732, 440))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb11.png'),
-                                           (waste_widths[10] - 4, waste_heights[10] - 4)), (808, 390))
+                                        (waste_widths[10] - 4, waste_heights[10] - 4)), (808, 390))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb12.png'),
-                                           (waste_widths[11] - 4, waste_heights[11] - 4)), (809, 440))
+                                        (waste_widths[11] - 4, waste_heights[11] - 4)), (809, 440))
         screen.blit(pygame.transform.scale(pygame.image.load('img/waste/garb17.png'),
-                                           (waste_widths[16] - 2, waste_heights[16] - 2)), (893, 390))
+                                        (waste_widths[16] - 2, waste_heights[16] - 2)), (893, 390))
         screen.blit(
             pygame.transform.scale(pygame.image.load(
                 'img/waste/garb18.png'), (waste_widths[17], waste_heights[17])),
